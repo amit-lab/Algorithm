@@ -4,8 +4,13 @@ public class BinarySearch {
 
     BinarySearch(int[] array) {
         this.array = array;
+
+        // binary search can only be applied on sorted array
+        Sorting sort = new Sorting(this.array);
+        this.array = sort.mergeSort();
+
         this.lb = 0;
-        this.ub = array.length;
+        this.ub = array.length-1;
     }
 
     boolean search(int key) {
@@ -30,8 +35,6 @@ public class BinarySearch {
 
     // find if "a[i] == i" for any integer 'i'
     int findInteger() {
-        Sorting sort = new Sorting(this.array);
-        this.array = sort.mergeSort();
         return findInteger(0, this.array.length-1);
     }
     private int findInteger (int lb, int ub) {
@@ -86,6 +89,26 @@ public class BinarySearch {
         }
 
         return findPositionOfLastInt(prevPos, pos, MaxLimitOfInt) + 1; // +1 cuz we need first infinity position
+    }
+
+    /* Array having n-distinct elements where
+     * ascending ordered elements until some point followed by descending ordered elements
+     * Find starting position of descending order
+     */
+    int descendingPos (int[] array) {
+        return descendingPos(array, 0, array.length-1);
+    }
+    private int descendingPos(int[] array, int lb, int ub) {
+        int mid = (lb+ub)/2;
+        if (array[mid] < array[mid+1]) { // means ascending
+            return descendingPos(array, mid+1, ub);
+        }
+        else {
+            if (array[mid-1] > array[mid])
+                return descendingPos(array, lb, mid-1);
+            else
+                return mid;
+        }
     }
 
 }
